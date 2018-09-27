@@ -1,0 +1,23 @@
+{
+  "name": "ohdarnbot",
+  "version": "1.0.0",
+  "description": "A general purpose Discord bot developed by bubble0h7",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bubble0h7/OhDarnBot.git"
+  },
+  "author": "bubble0h7",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bubble0h7/OhDarnBot/issues"
+  },
+  "homepage": "https://github.com/bubble0h7/OhDarnBot#readme",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "discord.js-commando": "^0.10.0"
+  }
+}
