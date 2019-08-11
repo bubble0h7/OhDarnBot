@@ -1,9 +1,17 @@
 /*jshint esversion: 6 */
 
 //require config file
-const config = require("./config.json");
+const configFileName = "./config.json";
+const config = require(configFileName);
 //require discord.js commando library 
 const discord = require("discord.js");
+
+//require getJSON
+const getJSON = require('get-json');
+//set url for league champions json file
+const leagueChampsUrl = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json";
+
+
 //d&i bot as object
 const bot = new discord.Client();
 
@@ -24,17 +32,55 @@ bot.on("debug", (e) => console.info(e));
 
 function rollDice (message, quantity, die) {
     console.log("Rolling " + quantity + die + "...");
-    message.channel.sendMessage("Rolling " + quantity + die + "...");
+    message.channel.send("Rolling " + quantity + die + "...");
     var result = 0;
     die = die.substr(1);
     for (i = 0; i < quantity; i++) {
         roll = Math.floor((Math.random() * die) + 1);
         console.log("Rolled: " + roll);
-        message.channel.sendMessage("Rolled: " + roll);
+        message.channel.send("Rolled: " + roll);
         result = result + roll;
     }
     message.reply("You rolled: " + result);
 }
+
+function getRandomLeagueChamp (message) {
+    console.log("Attempting to fetch 'League Champions' file...");
+    getJSON(leagueChampsUrl).then(function(response) {
+        console.log("Successfully retrieved 'League Champions' file.");
+        var champs = response.data;
+        var count = Object.keys(champs).length;
+        console.log("Retrieved " + count + " champions.");
+        if (count > 0) {
+            var randomNumber = Math.floor((Math.random() * count) + 1) -1;
+            console.log("Random champion number: " + randomNumber);
+            var champ = Object.values(champs);
+            console.log(champ[randomNumber]);
+            var name = champ[randomNumber].name;
+            var title = champ[randomNumber].title;
+            var blurb = champ[randomNumber].blurb.replace('<br><br>','');
+            var description = blurb;
+            var tags = champ[randomNumber].tags;
+            // league champion custome embed
+            var lolchampEmbed = new discord.RichEmbed()
+            .setColor('#c9aa71')
+            .setTitle(name + " - " + title)
+            .setURL('https://na.leagueoflegends.com/en/game-info/champions/' + name + '/')
+            .setDescription(description)
+            .setThumbnail('https://ddragon.leagueoflegends.com/cdn/9.15.1/img/champion/' + name + '.png')
+            .addField('Classes', tags)
+            .setTimestamp()
+            .setFooter('OhDarnBot');
+            message.channel.send(lolchampEmbed);
+        } else {
+            console.log("Retrieved " + Object.keys(champs).length + " champions.");
+            message.channel.send("Could not find any League Champions.");
+        }
+      }).catch(function(error) {
+        console.log(error);
+        message.channel.send("Error occured fetching random League of Legends champ.");
+      });
+};
 
 //checks content of messages and responses appropriately
 bot.on("message", message => {
@@ -72,6 +118,14 @@ bot.on("message", message => {
                     message.reply("For help using the roll command, try >help roll");
                     break;
                 }
+            case "random":
+                let arg = args[0];
+                if (arg  == "lolchamp" || arg == "champ") {
+                       getRandomLeagueChamp(message);
+                } else {
+                    console.log("Invalid arg: " + arg);
+                };
+            break;
         }
     };
 });
