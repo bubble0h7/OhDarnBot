@@ -30,6 +30,16 @@ bot.on("error", (e) => console.error(e));
 bot.on("warn", (e) => console.warn(e));
 bot.on("debug", (e) => console.info(e));
 
+// Triggers when the bot joins a server
+bot.on("guildCreate", guild => {
+    console.log("Joined a new guild: " + guild.name);
+});
+
+//Trigger when the bot is removed from a server
+bot.on("guildDelete", guild => {
+    console.log("Left a guild: " + guild.name);
+})
+
 
 function rollDice (message, quantity, die) {
     console.log("Rolling " + quantity + die + "...");
