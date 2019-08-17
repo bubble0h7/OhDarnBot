@@ -12,6 +12,7 @@ const getJSON = require('get-json');
 const leagueChampsUrl = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json";
 
 
+
 //d&i bot as object
 const bot = new discord.Client();
 
@@ -128,6 +129,45 @@ bot.on("message", message => {
             break;
         }
     };
+});
+
+bot.on('presenceUpdate', (oldMember, newMember) => {
+    let guild = newMember.guild;
+    if (newMember.presence.game) {
+        if (newMember.presence.game.streaming === true) { //change this back to true
+            if (oldMember.presence.game.streaming === false) {
+                var roles = guild.roles;
+                var streamingRoleExists = false;
+                var highestRolePosition = 1;
+                for (var [id, existingRole] of roles) {
+                    if (existingRole.name == "Currently Streaming") {
+                        streamingRoleExists = true;
+                        var roleID = existingRole.id;
+                    }
+                    if (existingRole.position > highestRolePosition) {
+                        highestRolePosition = existingRole.position - 1;
+                    }
+                }
+                if (streamingRoleExists === true) {
+                    newMember.addRole(roleID);
+                } else {
+                    // Create a new role with data
+                    guild.createRole({
+                        name: "Currently Streaming",
+                        color: "#6441a4",
+                        hoist: true,
+                        position: highestRolePosition
+                    })
+                    .then(role => {
+                        console.log(`Created new role with name ${role.name} and position: ${role.position}`);
+                        newMember.addRole(role);
+                    }).catch(console.error);
+                }
+            }
+        } else if (oldMember.presence.game.streaming === true) {
+            oldMember.removeRole("name", "Currently Streaming");
+        }
+    }
 });
 
 //login to account using bot token in config file
