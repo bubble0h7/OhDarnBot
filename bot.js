@@ -9,7 +9,7 @@ const discord = require("discord.js");
 //require getJSON
 const getJSON = require('get-json');
 //set url for league champions json file
-const leagueChampsUrl = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json";
+const leagueChampsUrl = "https://ddragon.leagueoflegends.com/cdn/9.16.1/data/en_US/champion.json";
 
 
 
@@ -185,6 +185,60 @@ bot.on("message", message => {
                     };
                 }
             break;
+            case "help":
+            let command = args[0];
+            let command2 = args[1];
+            if (command == "config") {
+                if (command2 == "setup") {
+                    var setupEmbed = new discord.RichEmbed()
+                    .setColor('#e74999')
+                    .setTitle(">config setup")
+                    .setDescription("This command is designed to be run as a one off command when Oh Darn Bot is first added to your server. It will find any currently streaming members and update their role to 'Currently Streaming'.")
+                    .setTimestamp()
+                    .setFooter('OhDarnBot');
+                    message.channel.send(setupEmbed);
+                } else if (command2 == null) {
+                    var configEmbed = new discord.RichEmbed()
+                    .setColor('#e74999')
+                    .setTitle(">config")
+                    .setDescription("These commands are designed to help with the configuration of your Oh Darn Bot.")
+                    .addField("Try:", [">help config setup"])
+                    .setTimestamp()
+                    .setFooter('OhDarnBot');
+                    message.channel.send(configEmbed);
+                }
+            } else if (command == "roll") {
+                var rollEmbed = new discord.RichEmbed()
+                .setColor('#e74999')
+                .setTitle(">roll")
+                .setDescription("Use this command to emulate rolling dice. It takes two parameters - Quantity and Dice; Quantity being how many dice you wish to roll, and Dice being what kind of dice/how many sided.")
+                .addField("Parameters:", [">roll quantity dice"])
+                .addField("Example:", [">roll 3 d8"])
+                .addField("Avaliable Dice:", ["d4", "d6", "d8", "d10", "d12", "d20", "d100"])
+                .setTimestamp()
+                .setFooter('OhDarnBot');
+                message.channel.send(rollEmbed);
+            } else if (command == "random") {
+                if (command2 == "lolchamp" || command2 == "champ") {
+                    var champEmbed = new discord.RichEmbed()
+                    .setColor('#e74999')
+                    .setTitle(">random champ / >random lolchamp")
+                    .setDescription("This command will fetch you a random champion from League of Legends.")
+                    .setTimestamp()
+                    .setFooter('OhDarnBot');
+                    message.channel.send(champEmbed);
+                } else if (command2 == null) {
+                    var randomEmbed = new discord.RichEmbed()
+                    .setColor('#e74999')
+                    .setTitle(">random")
+                    .setDescription("These commands are random generators that may come in handy.")
+                    .addField("Try:", [">help random lolchamp", ">help random champ"])
+                    .setTimestamp()
+                    .setFooter('OhDarnBot');
+                    message.channel.send(randomEmbed);
+                }
+            }
+            break;
         }
     };
 });
@@ -204,6 +258,11 @@ bot.on('presenceUpdate', (oldMember, newMember) => {
                 oldMember.removeRole("name", "Currently Streaming");
                 console.log(oldMember.displayName + "stopped streaming");
             }
+        }
+    } else if (oldMember.presence.game) {
+        if (oldMember.presence.game.streaming === true) {
+            oldMember.removeRole("name", "Currently Streaming");
+            console.log(oldMember.displayName + "stopped streaming");
         }
     }
 });
