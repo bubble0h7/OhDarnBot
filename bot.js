@@ -49,7 +49,7 @@ function getRandomLeagueChamp (message) {
             var tags = champ[randomNumber].tags;
             // league champion custome embed
             var lolchampEmbed = new discord.RichEmbed()
-            .setColor('#c9aa71')
+            .setColor('#e74999')
             .setTitle(name + " - " + title)
             .setURL('https://na.leagueoflegends.com/en/game-info/champions/' + name + '/')
             .setDescription(description)
