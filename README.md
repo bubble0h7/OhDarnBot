@@ -2,9 +2,9 @@
 A general purpose Discord bot developed by bubble0h7
 
 ## Setup
-### Invite the bot to your Discord Server
+### Invite Oh Darn Bot to your Discord
 You'll need admin permissions in a server to invite the bot.
-### Move the bot's role
+### Update Oh Darn Bot's Role
 Make sure the bot's role is at the top of your server's [role hierarchy](https://support.discordapp.com/hc/en-us/articles/214836687-Role-Management-101).
 This is important for the functionality of the bot.
 
