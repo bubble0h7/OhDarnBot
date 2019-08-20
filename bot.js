@@ -33,6 +33,12 @@ bot.on("debug", (e) => console.info(e));
 // Triggers when the bot joins a server
 bot.on("guildCreate", guild => {
     console.log("Joined a new guild: " + guild.name);
+    var guildMembers = guild.members;
+    for (var [id, guildMember] of guildMembers) {
+        if (guildMember.presence.game && guildMember.presence.game === true) {
+
+        }
+    };
 });
 
 //Trigger when the bot is removed from a server
@@ -141,41 +147,57 @@ bot.on("message", message => {
     };
 });
 
+function checkForHighestRolePosition (guild) {
+    var roles = guild.roles;
+    var highestRolePosition = 1;
+    for (var [id, role] of roles) {
+        if (role.position > highestRolePosition) {
+            highestRolePosition = role.position;
+        }
+    }
+    return highestRolePosition;
+}
+
+function checkIfRoleExists (guild, roleName) {
+    var roles = guild.roles;
+    for (var [id, role] of roles) {
+        if (role.name == roleName) {
+            return role.id;
+        }
+    }
+    return;
+}
+
 bot.on('presenceUpdate', (oldMember, newMember) => {
     let guild = newMember.guild;
     if (newMember.presence.game) {
         if (newMember.presence.game.streaming === true) { //change this back to true
-            if (oldMember.presence.game.streaming === false) {
-                var roles = guild.roles;
-                var streamingRoleExists = false;
-                var highestRolePosition = 1;
-                for (var [id, existingRole] of roles) {
-                    if (existingRole.name == "Currently Streaming") {
-                        streamingRoleExists = true;
-                        var roleID = existingRole.id;
+            if (oldMember.presence.game) {
+                if (oldMember.presence.game.streaming === false) {
+                    var highestRolePosition = checkForHighestRolePosition(guild);
+                    var roleID = checkIfRoleExists(guild, "Currently Streaming");
+                    if (roleID) {
+                        newMember.addRole(roleID);
+                        console.log(newMember.displayName + "started streaming");
+                    } else {
+                        // Create a new role with data
+                        guild.createRole({
+                            name: "Currently Streaming",
+                            color: "#6441a4",
+                            hoist: true,
+                            position: highestRolePosition - 1
+                        })
+                        .then(role => {
+                            console.log(`Created new role with name ${role.name} and position: ${role.position}`);
+                            newMember.addRole(role);
+                            console.log(newMember.displayName + "started streaming");
+                        }).catch(console.error);
                     }
-                    if (existingRole.position > highestRolePosition) {
-                        highestRolePosition = existingRole.position - 1;
-                    }
-                }
-                if (streamingRoleExists === true) {
-                    newMember.addRole(roleID);
-                } else {
-                    // Create a new role with data
-                    guild.createRole({
-                        name: "Currently Streaming",
-                        color: "#6441a4",
-                        hoist: true,
-                        position: highestRolePosition
-                    })
-                    .then(role => {
-                        console.log(`Created new role with name ${role.name} and position: ${role.position}`);
-                        newMember.addRole(role);
-                    }).catch(console.error);
                 }
             }
         } else if (oldMember.presence.game.streaming === true) {
             oldMember.removeRole("name", "Currently Streaming");
+            console.log(oldMember.displayName + "stopped streaming");
         }
     }
 });
