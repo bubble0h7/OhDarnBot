@@ -16,37 +16,6 @@ const leagueChampsUrl = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_U
 //d&i bot as object
 const bot = new discord.Client();
 
-bot.on("ready", () => {
-    //when bot has launched, log in console
-    console.log("Bot (" + bot.user.username + ") launched...");
-    bot.generateInvite(["ADMINISTRATOR"]).then(link => {
-            console.log(link);
-        }).catch(err => {
-            console.log(err.stack);
-    });
-});
-
-bot.on("error", (e) => console.error(e));
-bot.on("warn", (e) => console.warn(e));
-bot.on("debug", (e) => console.info(e));
-
-// Triggers when the bot joins a server
-bot.on("guildCreate", guild => {
-    console.log("Joined a new guild: " + guild.name);
-    var guildMembers = guild.members;
-    for (var [id, guildMember] of guildMembers) {
-        if (guildMember.presence.game && guildMember.presence.game === true) {
-
-        }
-    };
-});
-
-//Trigger when the bot is removed from a server
-bot.on("guildDelete", guild => {
-    console.log("Left a guild: " + guild.name);
-})
-
-
 function rollDice (message, quantity, die) {
     console.log("Rolling " + quantity + die + "...");
     message.channel.send("Rolling " + quantity + die + "...");
@@ -59,7 +28,7 @@ function rollDice (message, quantity, die) {
         result = result + roll;
     }
     message.reply("You rolled: " + result);
-}
+};
 
 function getRandomLeagueChamp (message) {
     console.log("Attempting to fetch 'League Champions' file...");
@@ -99,6 +68,64 @@ function getRandomLeagueChamp (message) {
       });
 };
 
+
+function checkForHighestRolePosition (guild) {
+    var roles = guild.roles;
+    var highestRolePosition = 1;
+    for (var [id, role] of roles) {
+        if (role.position > highestRolePosition) {
+            highestRolePosition = role.position;
+        }
+    }
+    return highestRolePosition;
+};
+
+function checkIfRoleExists (guild, roleName) {
+    var roles = guild.roles;
+    for (var [id, role] of roles) {
+        if (role.name == roleName) {
+            return role.id;
+        }
+    }
+    return;
+};
+
+function giveMemberStreamingRole (member, guild) {
+    var highestRolePosition = checkForHighestRolePosition(guild);
+    var roleID = checkIfRoleExists(guild, "Currently Streaming");
+    if (roleID) {
+        member.addRole(roleID);
+        console.log(member.displayName + " started streaming");
+    } else {
+        // Create a new role with data
+        guild.createRole({
+            name: "Currently Streaming",
+            color: "#6441a4",
+            hoist: true,
+            position: highestRolePosition - 1
+        })
+        .then(role => {
+            console.log(`Created new role with name ${role.name} and position: ${role.position}`);
+            member.addRole(role);
+            console.log(member.displayName + " started streaming");
+        }).catch(console.error);
+    }
+};
+
+bot.on("ready", () => {
+    //when bot has launched, log in console
+    console.log("Bot (" + bot.user.username + ") launched...");
+    bot.generateInvite(["ADMINISTRATOR"]).then(link => {
+            console.log(link);
+        }).catch(err => {
+            console.log(err.stack);
+    });
+});
+
+bot.on("error", (e) => console.error(e));
+bot.on("warn", (e) => console.warn(e));
+bot.on("debug", (e) => console.info(e));
+
 //checks content of messages and responses appropriately
 bot.on("message", message => {
     //if message was posted by bot, ignore
@@ -136,37 +163,32 @@ bot.on("message", message => {
                     break;
                 }
             case "random":
-                let arg = args[0];
-                if (arg  == "lolchamp" || arg == "champ") {
+                let thing = args[0];
+                if (thing  == "lolchamp" || thing == "champ") {
                        getRandomLeagueChamp(message);
                 } else {
-                    console.log("Invalid arg: " + arg);
+                    console.log("Invalid arg: " + thing);
                 };
+            break;
+            case "config":
+                let setting = args[0];
+                if (setting == "setup") {
+                    var guild = message.guild;
+                    var guildMembers = guild.members;
+                    for (var [id, guildMember] of guildMembers) {
+                        if (guildMember.presence.game) {
+                            if (guildMember.presence.game.streaming === true) {
+                                giveMemberStreamingRole(guildMember, guild);
+                                message.send(guildMember + " is streaming. Updated their role.");
+                            }
+                        }
+                    };
+                }
             break;
         }
     };
 });
 
-function checkForHighestRolePosition (guild) {
-    var roles = guild.roles;
-    var highestRolePosition = 1;
-    for (var [id, role] of roles) {
-        if (role.position > highestRolePosition) {
-            highestRolePosition = role.position;
-        }
-    }
-    return highestRolePosition;
-}
-
-function checkIfRoleExists (guild, roleName) {
-    var roles = guild.roles;
-    for (var [id, role] of roles) {
-        if (role.name == roleName) {
-            return role.id;
-        }
-    }
-    return;
-}
 
 bot.on('presenceUpdate', (oldMember, newMember) => {
     let guild = newMember.guild;
@@ -174,32 +196,26 @@ bot.on('presenceUpdate', (oldMember, newMember) => {
         if (newMember.presence.game.streaming === true) { //change this back to true
             if (oldMember.presence.game) {
                 if (oldMember.presence.game.streaming === false) {
-                    var highestRolePosition = checkForHighestRolePosition(guild);
-                    var roleID = checkIfRoleExists(guild, "Currently Streaming");
-                    if (roleID) {
-                        newMember.addRole(roleID);
-                        console.log(newMember.displayName + "started streaming");
-                    } else {
-                        // Create a new role with data
-                        guild.createRole({
-                            name: "Currently Streaming",
-                            color: "#6441a4",
-                            hoist: true,
-                            position: highestRolePosition - 1
-                        })
-                        .then(role => {
-                            console.log(`Created new role with name ${role.name} and position: ${role.position}`);
-                            newMember.addRole(role);
-                            console.log(newMember.displayName + "started streaming");
-                        }).catch(console.error);
-                    }
+                    giveMemberStreamingRole(newMember, guild);
                 }
             }
-        } else if (oldMember.presence.game.streaming === true) {
-            oldMember.removeRole("name", "Currently Streaming");
-            console.log(oldMember.displayName + "stopped streaming");
+        } else if (oldMember.presence.game) {
+            if (oldMember.presence.game.streaming === true) {
+                oldMember.removeRole("name", "Currently Streaming");
+                console.log(oldMember.displayName + "stopped streaming");
+            }
         }
     }
+});
+
+// Triggers when the bot joins a server
+bot.on("guildCreate", guild => {
+    console.log("Joined a new guild: " + guild.name);
+});
+
+//Trigger when the bot is removed from a server
+bot.on("guildDelete", guild => {
+    console.log("Left a guild: " + guild.name);
 });
 
 //login to account using bot token in config file
