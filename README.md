@@ -22,21 +22,35 @@ Type `>config setup` in any text channel in your Discord Server. This will updat
 ## Commands
 ### >roll
 Emulates rolling dice.
+
 **Parameters:** quantity dice
+
 **Example:** >roll 3 d6 
+
+
 ### >random
 Random generators.
 ### >random champ / >random lolchamp
 Fetchs you a random champion from League of Legends.
+
 **Parameters:** none
+
 **Example:** >random champ
+
+
 ### >config
 To help with the configuration of your Oh Darn Bot.
 #### >config setup
 Designed to be run as a one off command when Oh Darn Bot is first added to your server. It will find any currently streaming members and update their role to 'Currently Streaming'.
+
 **Parameters:** none
+
 **Example:** >config setup
+
+
 ### >help
 For more information on a command.
+
 **Parameters:** command
+
 **Example:** >help config setup
