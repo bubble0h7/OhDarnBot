@@ -11,7 +11,7 @@ This is important for the functionality of the bot.
 - [x] Dice rolling
 - [x] Random League Champion Generation
 - [ ] Set new guild members role (configurable default role)
-- [ ] Currently Streaming Role Management
+- [x] Currently Streaming Role Management
 - [ ] Random League of Legends team with rerolling via reactions
 - [ ] Giveaways
 - [ ] Strawpolls
