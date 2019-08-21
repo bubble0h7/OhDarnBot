@@ -46,3 +46,14 @@ Designed to be run as a one off command when Oh Darn Bot is first added to your 
 For more information on a command.
 
 **Parameters:** command  **|  Example:** `>help config setup`
+
+
+
+## General Developemnt TODOs
+- [ ] Create embeded introducory message for on guild join
+- [ ] Refactor 'checkIfXExists' functions
+- [ ] Break commands up into folders/seperate files
+- [ ] Give the option to configure/customise the bot
+- [ ] Database to store each guild's config
+- [ ] Setup VPS to run bot as a service
+
