@@ -1,9 +1,14 @@
 # OhDarnBot
-A general purpose Discord bot developed by bubble0h7
+A Discord bot developed specifically for the [Oh Darn Discord](https://discord.gg/vceNhvR).
+Expansion to other servers has been kept in mind for if that ever becomes a point of interest.
+
+This project serves two purposes: 
+- to further my programming skills and knowledge of Node.JS
+- to reduce and replace the often-failing bots we used to rely on
 
 ## Setup
 ### Invite Oh Darn Bot to your Discord
-You'll need admin permissions in a server to invite the bot.
+You'll need admin permissions in a server to invite the bot. During development, the invite link for this bot will be kept under wraps. Feel free to get in touch if you're interested in using the bot during this time.
 ### Update Oh Darn Bot's Role
 Make sure the bot's role is at the top of your server's [role hierarchy](https://support.discordapp.com/hc/en-us/articles/214836687-Role-Management-101).
 This is important for the functionality of the bot.
@@ -11,6 +16,7 @@ This is important for the functionality of the bot.
 Type `>config setup` in any text channel in your Discord Server. This will update any streaming members' roles to 'Currently Streaming'.
 
 ## Features
+This bot's features will likely end up being focused around general purpose and moderating, with the odd League of Legends commands.
 - [x] Dice rolling
 - [x] Random League Champion Generation
 - [ ] Set new guild members role (configurable default role)
@@ -18,6 +24,8 @@ Type `>config setup` in any text channel in your Discord Server. This will updat
 - [ ] Random League of Legends team with rerolling via reactions
 - [ ] Giveaways
 - [ ] Strawpolls
+- [ ] Moderation tools
+- [ ] Extensive bot customisation
 
 ## Commands
 ### >roll
