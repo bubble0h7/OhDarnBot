@@ -68,6 +68,13 @@ function getRandomLeagueChamp (message) {
       });
 };
 
+function checkIfBotChannelExists (channels) {
+    for (var [id, channel] of channels) {
+        if (channel.name == "ohdarn-bot" && channel.type == "text") {
+            return channel.id;
+        }
+    }
+}
 
 function checkForHighestRolePosition (guild) {
     var roles = guild.roles;
@@ -140,6 +147,26 @@ bot.on("message", message => {
         const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
         switch (command) {
+            case "temp":
+                var channels = message.guild.channels;
+                var botChannelID = checkIfBotChannelExists(channels);
+                if (botChannelID) {
+                    message.reply("you already have a bot channel for me: " + message.guild.channels.get(botChannelID).toString());
+                } else {
+                    message.guild.createChannel('ohdarn-bot', { type: 'text' })
+                    .then(function() {
+                            var updatedChannels = message.guild.channels;
+                            var newBotChannelID = checkIfBotChannelExists(updatedChannels);
+                            if (newBotChannelID) {
+                                //message.guild.channels.find(newBotChannel => newBotChannel.id === newBotChannelID).reply("I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
+                                message.guild.channels.get(newBotChannelID).send(message.author.toString() + " I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
+                            } else {
+                                console.log("Failed to find new bot channel");
+                            }
+                        })
+                    .catch(console.error);
+                }
+            break;
             case "roll":
                 let quantity = args[0];
                 let die = args[1];
@@ -265,6 +292,24 @@ bot.on('presenceUpdate', (oldMember, newMember) => {
 // Triggers when the bot joins a server
 bot.on("guildCreate", guild => {
     console.log("Joined a new guild: " + guild.name);
+    var channels = guild.channels;
+    var botChannelID = checkIfBotChannelExists(channels);
+    if (botChannelID) {
+        guild.channels.get(botChannelID).send("Oh hey, look at this sweet bot channel you already have for me. Thanks!");
+    } else {
+        guild.createChannel('ohdarn-bot', { type: 'text' })
+        .then(function() {
+                var updatedChannels = guild.channels;
+                var newBotChannelID = checkIfBotChannelExists(updatedChannels);
+                if (newBotChannelID) {
+                    //message.guild.channels.find(newBotChannel => newBotChannel.id === newBotChannelID).reply("I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
+                    guild.channels.get(newBotChannelID).send("Hiya! I made myself a bot channel. Feel free to delete it or move it where ever you like.");
+                } else {
+                    console.log("Failed to find new bot channel");
+                }
+            })
+        .catch(console.error);
+    }
 });
 
 //Trigger when the bot is removed from a server
