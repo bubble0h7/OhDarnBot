@@ -54,7 +54,7 @@ For more information on a command.
 
 
 ## General Development TODOs
-- [ ] Create embeded introducory message for on guild join
+- [ ] Create embeded introductory message for on guild join
 - [ ] Refactor 'checkIfXExists' functions
 - [ ] Break commands up into folders/seperate files
 - [ ] Give the option to configure/customise the bot
