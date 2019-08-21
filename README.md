@@ -23,12 +23,12 @@ Type `>config setup` in any text channel in your Discord Server. This will updat
 ### >roll
 Emulates rolling dice.
 
-**Parameters:** quantity dice  **|  Example:** `>roll 3 d6`
+**Parameters:** quantity, dice  **|  Example:** `>roll 3 d6`
 
 
 ### >random
 Random generators.
-### >random champ / >random lolchamp
+### >random champ OR >random lolchamp
 Fetchs you a random champion from League of Legends.
 
 **Parameters:** none  **|  Example:** `>random champ`
@@ -49,7 +49,7 @@ For more information on a command.
 
 
 
-## General Developemnt TODOs
+## General Development TODOs
 - [ ] Create embeded introducory message for on guild join
 - [ ] Refactor 'checkIfXExists' functions
 - [ ] Break commands up into folders/seperate files
