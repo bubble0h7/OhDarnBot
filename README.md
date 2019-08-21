@@ -41,6 +41,10 @@ Designed to be run as a one off command when Oh Darn Bot is first added to your 
 
 **Parameters:** none  **|  Example:** `>config setup`
 
+#### >config botchannel
+Checks for an 'ohdarn-bot' text channel, and creates the channel if one doesn't already exist.
+
+**Parameters:** none  **|  Example:** `>config botchannel`
 
 ### >help
 For more information on a command.

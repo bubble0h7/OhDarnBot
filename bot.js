@@ -148,24 +148,7 @@ bot.on("message", message => {
         const command = args.shift().toLowerCase();
         switch (command) {
             case "temp":
-                var channels = message.guild.channels;
-                var botChannelID = checkIfBotChannelExists(channels);
-                if (botChannelID) {
-                    message.reply("you already have a bot channel for me: " + message.guild.channels.get(botChannelID).toString());
-                } else {
-                    message.guild.createChannel('ohdarn-bot', { type: 'text' })
-                    .then(function() {
-                            var updatedChannels = message.guild.channels;
-                            var newBotChannelID = checkIfBotChannelExists(updatedChannels);
-                            if (newBotChannelID) {
-                                //message.guild.channels.find(newBotChannel => newBotChannel.id === newBotChannelID).reply("I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
-                                message.guild.channels.get(newBotChannelID).send(message.author.toString() + " I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
-                            } else {
-                                console.log("Failed to find new bot channel");
-                            }
-                        })
-                    .catch(console.error);
-                }
+                //
             break;
             case "roll":
                 let quantity = args[0];
@@ -210,6 +193,25 @@ bot.on("message", message => {
                             }
                         }
                     };
+                } else if (setting == "botchannel") {
+                    var channels = message.guild.channels;
+                    var botChannelID = checkIfBotChannelExists(channels);
+                    if (botChannelID) {
+                        message.reply("you already have a bot channel for me: " + message.guild.channels.get(botChannelID).toString());
+                    } else {
+                        message.guild.createChannel('ohdarn-bot', { type: 'text' })
+                        .then(function() {
+                                var updatedChannels = message.guild.channels;
+                                var newBotChannelID = checkIfBotChannelExists(updatedChannels);
+                                if (newBotChannelID) {
+                                    //message.guild.channels.find(newBotChannel => newBotChannel.id === newBotChannelID).reply("I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
+                                    message.guild.channels.get(newBotChannelID).send(message.author.toString() + " I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
+                                } else {
+                                    console.log("Failed to find new bot channel");
+                                }
+                            })
+                        .catch(console.error);
+                    }
                 }
             break;
             case "help":
@@ -224,12 +226,20 @@ bot.on("message", message => {
                     .setTimestamp()
                     .setFooter('OhDarnBot');
                     message.channel.send(setupEmbed);
+                } else if (command2 == "botchannel") {
+                    var botchannelEmbed = new discord.RichEmbed()
+                    .setColor('#e74999')
+                    .setTitle(">config botchannel")
+                    .setDescription("This command will check for a bot text channel and create the channel if one doesn't already exist.")
+                    .setTimestamp()
+                    .setFooter('OhDarnBot');
+                    message.channel.send(botchannelEmbed);
                 } else if (command2 == null) {
                     var configEmbed = new discord.RichEmbed()
                     .setColor('#e74999')
                     .setTitle(">config")
                     .setDescription("These commands are designed to help with the configuration of your Oh Darn Bot.")
-                    .addField("Try:", [">help config setup"])
+                    .addField("Try:", [">help config setup", ">help config botchannel"])
                     .setTimestamp()
                     .setFooter('OhDarnBot');
                     message.channel.send(configEmbed);
@@ -264,6 +274,15 @@ bot.on("message", message => {
                     .setFooter('OhDarnBot');
                     message.channel.send(randomEmbed);
                 }
+            } else {
+                var helpEmbed = new discord.RichEmbed()
+                .setColor('#e74999')
+                .setTitle(">help")
+                .setDescription("What do you need help with?")
+                .addField("Try:", [">help config", ">help config setup", ">help config botchannel", ">help roll", ">help random lolchamp", ">help random champ"])
+                .setTimestamp()
+                .setFooter('OhDarnBot');
+                message.channel.send(helpEmbed);
             }
             break;
         }
