@@ -179,7 +179,7 @@ bot.on("message", message => {
                         if (guildMember.presence.game) {
                             if (guildMember.presence.game.streaming === true) {
                                 giveMemberStreamingRole(guildMember, guild);
-                                message.send(guildMember + " is streaming. Updated their role.");
+                                message.channel.send(guildMember + " is streaming. Updated their role.");
                             }
                         }
                     };
@@ -245,25 +245,20 @@ bot.on("message", message => {
 
 
 bot.on('presenceUpdate', (oldMember, newMember) => {
-    let guild = newMember.guild;
-    if (newMember.presence.game) {
-        if (newMember.presence.game.streaming === true) { //change this back to true
-            if (oldMember.presence.game) {
-                if (oldMember.presence.game.streaming === false) {
-                    giveMemberStreamingRole(newMember, guild);
-                }
-            }
-        } else if (oldMember.presence.game) {
-            if (oldMember.presence.game.streaming === true) {
-                oldMember.removeRole("name", "Currently Streaming");
-                console.log(oldMember.displayName + "stopped streaming");
+    var guild = newMember.guild;
+    try {
+        if (newMember.presence.game.streaming) {
+            giveMemberStreamingRole(newMember, guild);
+        } else {
+            if(oldMember.presence.game.streaming) {
+                console.log(oldMember.displayName + " stopped streaming");
+                var roleID = checkIfRoleExists(guild, "Currently Streaming");
+                oldMember.removeRole(roleID);
             }
         }
-    } else if (oldMember.presence.game) {
-        if (oldMember.presence.game.streaming === true) {
-            oldMember.removeRole("name", "Currently Streaming");
-            console.log(oldMember.displayName + "stopped streaming");
-        }
+    } catch (e) {
+        var roleID = checkIfRoleExists(guild, "Currently Streaming");
+        oldMember.removeRole(roleID);
     }
 });
 
