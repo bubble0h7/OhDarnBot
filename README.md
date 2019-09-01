@@ -19,7 +19,7 @@ Type `>config setup` in any text channel in your Discord Server. This will updat
 This bot's features will likely end up being focused around general purpose and moderating, with the odd League of Legends commands.
 - [x] Dice rolling
 - [x] Random League Champion Generation
-- [ ] Set new guild members role (configurable default role)
+- [x] Automatic new guild members role
 - [x] Currently Streaming Role Management
 - [ ] Random League of Legends team with rerolling via reactions
 - [ ] Giveaways
@@ -62,8 +62,10 @@ For more information on a command.
 
 
 ## General Development TODOs
+- [x] Create automatic 'EVERYONE' role assignment on guild join
 - [ ] Create embeded introductory message for on guild join
 - [ ] Refactor 'checkIfXExists' functions
+- [ ] Implement lodash to make the 'presenceUpdate' event less gross
 - [ ] Break commands up into folders/seperate files
 - [ ] Give the option to configure/customise the bot
 - [ ] Database to store each guild's config
