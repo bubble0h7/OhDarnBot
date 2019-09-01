@@ -1,80 +1,43 @@
 /*jshint esversion: 6 */
+'use strict';
 
 //require config file
 const configFileName = "./config.json";
-const config = require(configFileName);
+const configFile = require(configFileName);
 //require discord.js commando library 
 const discord = require("discord.js");
 
 //require getJSON
-const getJSON = require('get-json');
+//const getJSON = require('get-json');
 //set url for league champions json file
-const leagueChampsUrl = "https://ddragon.leagueoflegends.com/cdn/9.16.1/data/en_US/champion.json";
+//const leagueChampsUrl = "https://ddragon.leagueoflegends.com/cdn/9.16.1/data/en_US/champion.json";
+const fs = require('fs');
 
+//commands
+const help = require('./help.js');
+const config = require('./config.js');
+
+//functions
+const checkIfBotChannelExists = require('./functions/checkIfBotChannelExists.js');
+const rollDice = require('./functions/rollDice.js');
+const sendLeagueChampionEmbed = require('./functions/sendLeagueChampionEmbed.js');
+const getRandomLeagueChamp = require('./functions/getRandomLeagueChamp.js');
+
+//variables
+const leagueChampsFile = "champions.json";
+const embedColor = "#e74999";
 
 
 //d&i bot as object
 const bot = new discord.Client();
 
-function rollDice (message, quantity, die) {
-    console.log("Rolling " + quantity + die + "...");
-    message.channel.send("Rolling " + quantity + die + "...");
-    var result = 0;
-    die = die.substr(1);
-    for (i = 0; i < quantity; i++) {
-        roll = Math.floor((Math.random() * die) + 1);
-        console.log("Rolled: " + roll);
-        message.channel.send("Rolled: " + roll);
-        result = result + roll;
-    }
-    message.reply("You rolled: " + result);
-};
 
-function getRandomLeagueChamp (message) {
-    console.log("Attempting to fetch 'League Champions' file...");
-    getJSON(leagueChampsUrl).then(function(response) {
-        console.log("Successfully retrieved 'League Champions' file.");
-        var champs = response.data;
-        var count = Object.keys(champs).length;
-        console.log("Retrieved " + count + " champions.");
-        if (count > 0) {
-            var randomNumber = Math.floor((Math.random() * count) + 1) -1;
-            console.log("Random champion number: " + randomNumber);
-            var champ = Object.values(champs);
-            console.log(champ[randomNumber]);
-            var name = champ[randomNumber].name;
-            var title = champ[randomNumber].title;
-            var blurb = champ[randomNumber].blurb.replace('<br><br>','');
-            var description = blurb;
-            var tags = champ[randomNumber].tags;
-            // league champion custome embed
-            var lolchampEmbed = new discord.RichEmbed()
-            .setColor('#e74999')
-            .setTitle(name + " - " + title)
-            .setURL('https://na.leagueoflegends.com/en/game-info/champions/' + name + '/')
-            .setDescription(description)
-            .setThumbnail('https://ddragon.leagueoflegends.com/cdn/9.15.1/img/champion/' + name + '.png')
-            .addField('Classes', tags)
-            .setTimestamp()
-            .setFooter('OhDarnBot');
-            message.channel.send(lolchampEmbed);
-        } else {
-            console.log("Retrieved " + Object.keys(champs).length + " champions.");
-            message.channel.send("Could not find any League Champions.");
-        }
-      }).catch(function(error) {
-        console.log(error);
-        message.channel.send("Error occured fetching random League of Legends champ.");
-      });
-};
 
-function checkIfBotChannelExists (channels) {
-    for (var [id, channel] of channels) {
-        if (channel.name == "ohdarn-bot" && channel.type == "text") {
-            return channel.id;
-        }
-    }
-}
+
+
+
+
+
 
 function checkForHighestRolePosition (guild) {
     var roles = guild.roles;
@@ -127,6 +90,9 @@ bot.on("ready", () => {
         }).catch(err => {
             console.log(err.stack);
     });
+    bot.user.setActivity('with v1.0.1 (UNSTABLE)', { type: 'PLAYING' })
+        .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
+        .catch(console.error);
 });
 
 bot.on("error", (e) => console.error(e));
@@ -143,9 +109,10 @@ bot.on("message", message => {
     if(message.content == "ping") {
         message.channel.send("pong");
     };
-    if (message.content.startsWith(config.prefix)) {
-        const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+    if (message.content.startsWith(configFile.prefix)) {
+        const args = message.content.slice(configFile.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
+
         switch (command) {
             case "temp":
                 //
@@ -181,109 +148,24 @@ bot.on("message", message => {
                 };
             break;
             case "config":
-                let setting = args[0];
-                if (setting == "setup") {
-                    var guild = message.guild;
-                    var guildMembers = guild.members;
-                    for (var [id, guildMember] of guildMembers) {
-                        if (guildMember.presence.game) {
-                            if (guildMember.presence.game.streaming === true) {
-                                giveMemberStreamingRole(guildMember, guild);
-                                message.channel.send(guildMember + " is streaming. Updated their role.");
-                            }
-                        }
-                    };
-                } else if (setting == "botchannel") {
-                    var channels = message.guild.channels;
-                    var botChannelID = checkIfBotChannelExists(channels);
-                    if (botChannelID) {
-                        message.reply("you already have a bot channel for me: " + message.guild.channels.get(botChannelID).toString());
-                    } else {
-                        message.guild.createChannel('ohdarn-bot', { type: 'text' })
-                        .then(function() {
-                                var updatedChannels = message.guild.channels;
-                                var newBotChannelID = checkIfBotChannelExists(updatedChannels);
-                                if (newBotChannelID) {
-                                    //message.guild.channels.find(newBotChannel => newBotChannel.id === newBotChannelID).reply("I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
-                                    message.guild.channels.get(newBotChannelID).send(message.author.toString() + " I made myself a bot channel. I hope that's okay! Feel free to move it where ever you like.");
-                                } else {
-                                    console.log("Failed to find new bot channel");
-                                }
-                            })
-                        .catch(console.error);
-                    }
-                }
+
+                config(args, message);
+
             break;
             case "help":
-            let command = args[0];
-            let command2 = args[1];
-            if (command == "config") {
-                if (command2 == "setup") {
-                    var setupEmbed = new discord.RichEmbed()
-                    .setColor('#e74999')
-                    .setTitle(">config setup")
-                    .setDescription("This command is designed to be run as a one off command when Oh Darn Bot is first added to your server. It will find any currently streaming members and update their role to 'Currently Streaming'.")
-                    .setTimestamp()
-                    .setFooter('OhDarnBot');
-                    message.channel.send(setupEmbed);
-                } else if (command2 == "botchannel") {
-                    var botchannelEmbed = new discord.RichEmbed()
-                    .setColor('#e74999')
-                    .setTitle(">config botchannel")
-                    .setDescription("This command will check for a bot text channel and create the channel if one doesn't already exist.")
-                    .setTimestamp()
-                    .setFooter('OhDarnBot');
-                    message.channel.send(botchannelEmbed);
-                } else if (command2 == null) {
-                    var configEmbed = new discord.RichEmbed()
-                    .setColor('#e74999')
-                    .setTitle(">config")
-                    .setDescription("These commands are designed to help with the configuration of your Oh Darn Bot.")
-                    .addField("Try:", [">help config setup", ">help config botchannel"])
-                    .setTimestamp()
-                    .setFooter('OhDarnBot');
-                    message.channel.send(configEmbed);
-                }
-            } else if (command == "roll") {
-                var rollEmbed = new discord.RichEmbed()
-                .setColor('#e74999')
-                .setTitle(">roll")
-                .setDescription("Use this command to emulate rolling dice. It takes two parameters - Quantity and Dice; Quantity being how many dice you wish to roll, and Dice being what kind of dice/how many sided.")
-                .addField("Parameters:", [">roll quantity dice"])
-                .addField("Example:", [">roll 3 d8"])
-                .addField("Avaliable Dice:", ["d4", "d6", "d8", "d10", "d12", "d20", "d100"])
-                .setTimestamp()
-                .setFooter('OhDarnBot');
-                message.channel.send(rollEmbed);
-            } else if (command == "random") {
-                if (command2 == "lolchamp" || command2 == "champ") {
-                    var champEmbed = new discord.RichEmbed()
-                    .setColor('#e74999')
-                    .setTitle(">random champ / >random lolchamp")
-                    .setDescription("This command will fetch you a random champion from League of Legends.")
-                    .setTimestamp()
-                    .setFooter('OhDarnBot');
-                    message.channel.send(champEmbed);
-                } else if (command2 == null) {
-                    var randomEmbed = new discord.RichEmbed()
-                    .setColor('#e74999')
-                    .setTitle(">random")
-                    .setDescription("These commands are random generators that may come in handy.")
-                    .addField("Try:", [">help random lolchamp", ">help random champ"])
-                    .setTimestamp()
-                    .setFooter('OhDarnBot');
-                    message.channel.send(randomEmbed);
-                }
-            } else {
+
+                var embedDetails = help(args);
                 var helpEmbed = new discord.RichEmbed()
-                .setColor('#e74999')
-                .setTitle(">help")
-                .setDescription("What do you need help with?")
-                .addField("Try:", [">help config", ">help config setup", ">help config botchannel", ">help roll", ">help random lolchamp", ">help random champ"])
-                .setTimestamp()
-                .setFooter('OhDarnBot');
+                    .setColor(embedColor)
+                    .setTitle(embedDetails.title)
+                    .setDescription(embedDetails.description)
+                    .addField("Try:", embedDetails.try)
+                    .addField("Parameters:", embedDetails.parameters)
+                    .addField("Example:", embedDetails.example)
+                    .setTimestamp()
+                    .setFooter('OhDarnBot');
                 message.channel.send(helpEmbed);
-            }
+
             break;
         }
     };
@@ -331,10 +213,20 @@ bot.on("guildCreate", guild => {
     }
 });
 
+bot.on("guildMemberAdd", member => {
+    var defaultRole = member.guild.roles.find(x => x.name === "EVERYONE");
+    if (defaultRole) {
+        member.addRole(defaultRole);
+        console.log("New guild member (" + member.displayName + ") joined the server. Assigned them the 'EVERYONE' role!");
+    } else {
+        console.log("New guild member (" + member.displayName + ") joined the server. Unable to assign 'EVERYONE' role!");
+    }
+});
+
 //Trigger when the bot is removed from a server
 bot.on("guildDelete", guild => {
     console.log("Left a guild: " + guild.name);
 });
 
 //login to account using bot token in config file
-bot.login(config.token);
+bot.login(configFile.token);
