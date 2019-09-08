@@ -2,7 +2,16 @@ module.exports = function (args, message) {
     
     const checkIfBotChannelExists = require('./functions/checkIfBotChannelExists.js');
 
+    //require config file
+    const configFileName = "./config.json";
+    const configFile = require(configFileName);
+    
+    
+    //database 
+    const api = require('./database/api.js');
+
     let arg1 = args[0];
+    let arg2 = args[1];
     var guild = message.guild;
     var guildMembers = guild.members;
 
@@ -43,6 +52,19 @@ module.exports = function (args, message) {
                     })
                 .catch(console.error);
             }
+        break;
+
+        case "embedcolor":
+        case "embedcolour":
+        //Validate hex code
+            if (arg2.startsWith("#") && arg2.length == 7 && arg2.substr(1).match("^[A-z0-9]+$")){
+                
+                //Attempt to update database
+                api.update(message.guild.id, "embed_colour", arg2, message);
+
+            } else {
+                message.channel.send("Please enter a proper hex colour value. For example: #e74999");
+            };
         break;
 
         default:

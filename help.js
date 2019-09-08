@@ -11,7 +11,8 @@ module.exports = function (args) {
                 case "setup":
                     embedDetails = {
                           title: ">config setup"
-                        , description: "This command is designed to be run as a one off command when Oh Darn Bot is first added to your server. It will find any currently streaming members and update their role to 'Currently Streaming'." 
+                        , description: "This command is designed to be run as a one off command when Oh Darn Bot is first added to your server. It will find any currently streaming members and update their role to 'Currently Streaming'."
+                        , try: [">help config setup"] 
                         , parameters: ["None"]
                         , example: [">config setup"]
                     };
@@ -21,8 +22,20 @@ module.exports = function (args) {
                     embedDetails = {
                           title: ">config botchannel"
                         , description: "This command will check for a bot text channel and create the channel if one doesn't already exist." 
+                        , try: [">help config botchannel"]
                         , parameters: ["None"]
                         , example: [">config botchannel"]
+                    };
+                break;
+
+                case "embedcolour":
+                case "embedcolor":
+                    embedDetails = {
+                          title: ">config embedcolour / >config embedcolour"
+                        , description: "This command sets what embed colour the bot uses for your server." 
+                        , try: [">help config embedcolour", ">help config embedcolour"]
+                        , parameters: ["Hex Colour"]
+                        , example: [">config embedcolour #e74999", ">config embedcolor #e74999"]
                     };
                 break;
 
@@ -47,7 +60,8 @@ module.exports = function (args) {
             break;
         case "random":
             switch (arg2) {
-                case "lolchamp" || "champ":
+                case "lolchamp":
+                case "champ":
                     embedDetails = {
                           title: ">random champ / >random lolchamp"
                         , description: "This command will fetch you a random champion from League of Legends." 
@@ -70,9 +84,9 @@ module.exports = function (args) {
         embedDetails = {
               title: ">help"
             , description: "What do you need help with?" 
-            , try: [">help config", ">help config setup", ">help config botchannel", ">help roll", ">help random lolchamp", ">help random champ"]
+            , try: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour",  ">help roll", ">help random lolchamp", ">help random champ"]
             , parameters: ["Yes"]
-            , example: [">help config", ">help config setup", ">help config botchannel", ">help roll", ">help random lolchamp", ">help random champ"]
+            , example: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour", ">help roll", ">help random lolchamp", ">help random champ"]
         };
     }
     

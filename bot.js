@@ -4,23 +4,12 @@
 //require config file
 const configFileName = "./config.json";
 const configFile = require(configFileName);
+
 //require discord.js commando library 
 const discord = require("discord.js");
 
-const mysql = require('mysql');
-const con = mysql.createConnection({
-    host: configFile.host,
-    port: configFile.port,
-    database: configFile.database,
-    user: configFile.user,
-    password: configFile.password
-  });
-
-//require getJSON
-//const getJSON = require('get-json');
-//set url for league champions json file
-//const leagueChampsUrl = "https://ddragon.leagueoflegends.com/cdn/9.16.1/data/en_US/champion.json";
-const fs = require('fs');
+//database 
+const api = require('./database/api.js');
 
 //commands
 const help = require('./help.js');
@@ -29,12 +18,7 @@ const config = require('./config.js');
 //functions
 const checkIfBotChannelExists = require('./functions/checkIfBotChannelExists.js');
 const rollDice = require('./functions/rollDice.js');
-const sendLeagueChampionEmbed = require('./functions/sendLeagueChampionEmbed.js');
 const getRandomLeagueChamp = require('./functions/getRandomLeagueChamp.js');
-
-//variables
-const leagueChampsFile = "champions.json";
-const embedColor = "#e74999";
 
 //d&i bot as object
 const bot = new discord.Client();
@@ -85,7 +69,7 @@ function giveMemberStreamingRole (member, guild) {
 
 bot.on("ready", () => {
     //connect to db
-    con.connect(function(err) {
+    api.connect(function(err) {
         if (err) throw err;
         console.log("Connected to database!");
       });
@@ -96,7 +80,7 @@ bot.on("ready", () => {
         }).catch(err => {
             console.log(err.stack);
     });
-    bot.user.setActivity('with v1.1.1 (UNSTABLE)', { type: 'PLAYING' })
+    bot.user.setActivity('with v1.1.2 (UNSTABLE)', { type: 'PLAYING' })
         .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
         .catch(console.error);
 });
@@ -162,7 +146,7 @@ bot.on("message", message => {
 
                 var embedDetails = help(args);
                 var helpEmbed = new discord.RichEmbed()
-                    .setColor(embedColor)
+                    .setColor(configFile.embedColor)
                     .setTitle(embedDetails.title)
                     .setDescription(embedDetails.description)
                     .addField("Try:", embedDetails.try)
@@ -203,7 +187,7 @@ bot.on("guildCreate", guild => {
     con.query(sql, function (err, result) {
         if (err) throw err;
         console.log("Added guild to database.");
-    })
+    });
     var channels = guild.channels;
     var botChannelID = checkIfBotChannelExists(channels);
     if (botChannelID) {
