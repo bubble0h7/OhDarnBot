@@ -80,7 +80,7 @@ bot.on("ready", () => {
         }).catch(err => {
             console.log(err.stack);
     });
-    bot.user.setActivity('with v1.1.2 (UNSTABLE)', { type: 'PLAYING' })
+    bot.user.setActivity('with v1.1.3 (UNSTABLE)', { type: 'PLAYING' })
         .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
         .catch(console.error);
 });
