@@ -2,7 +2,7 @@
 A Discord bot developed specifically for the [Oh Darn Discord](https://discord.gg/vceNhvR).
 Support for multiple servers/customisation is a work in progress.
 
-Public website is now live [here](https://http://bot.ohdarn.tv/).
+Public website is now live [here](https://bot.ohdarn.tv/).
 
 This project serves two purposes: 
 - to further my programming skills and knowledge of Node.JS
