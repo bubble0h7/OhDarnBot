@@ -1,6 +1,6 @@
 module.exports = function (message) {
     const fs = require('fs');
-    const leagueChampsFile = "../champions.json";
+    const leagueChampsFile = "./champions.json";
     const sendLeagueChampionEmbed = require('./sendLeagueChampionEmbed.js');
     
     var rawdata = fs.readFileSync(leagueChampsFile);

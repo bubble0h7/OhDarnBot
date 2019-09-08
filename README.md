@@ -68,6 +68,7 @@ For more information on a command.
 - [ ] Implement lodash to make the 'presenceUpdate' event less gross
 - [ ] Break commands up into folders/seperate files
 - [ ] Give the option to configure/customise the bot
-- [ ] Database to store each guild's config
-- [ ] Setup VPS to run bot as a service
+- [x] Database to store each guild's config
+- <s>[ ] Setup VPS to run bot as a service</s>
+- [x] Setup bot to use [deploys.io](https://deploys.io/)
 

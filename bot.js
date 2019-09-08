@@ -7,6 +7,15 @@ const configFile = require(configFileName);
 //require discord.js commando library 
 const discord = require("discord.js");
 
+const mysql = require('mysql');
+const con = mysql.createConnection({
+    host: configFile.host,
+    port: configFile.port,
+    database: configFile.database,
+    user: configFile.user,
+    password: configFile.password
+  });
+
 //require getJSON
 //const getJSON = require('get-json');
 //set url for league champions json file
@@ -27,16 +36,8 @@ const getRandomLeagueChamp = require('./functions/getRandomLeagueChamp.js');
 const leagueChampsFile = "champions.json";
 const embedColor = "#e74999";
 
-
 //d&i bot as object
 const bot = new discord.Client();
-
-
-
-
-
-
-
 
 
 function checkForHighestRolePosition (guild) {
@@ -83,6 +84,11 @@ function giveMemberStreamingRole (member, guild) {
 };
 
 bot.on("ready", () => {
+    //connect to db
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected to database!");
+      });
     //when bot has launched, log in console
     console.log("Bot (" + bot.user.username + ") launched...");
     bot.generateInvite(["ADMINISTRATOR"]).then(link => {
@@ -90,7 +96,7 @@ bot.on("ready", () => {
         }).catch(err => {
             console.log(err.stack);
     });
-    bot.user.setActivity('with v1.0.1 (UNSTABLE)', { type: 'PLAYING' })
+    bot.user.setActivity('with v1.1.1 (UNSTABLE)', { type: 'PLAYING' })
         .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
         .catch(console.error);
 });
@@ -193,6 +199,11 @@ bot.on('presenceUpdate', (oldMember, newMember) => {
 // Triggers when the bot joins a server
 bot.on("guildCreate", guild => {
     console.log("Joined a new guild: " + guild.name);
+    var sql = "INSERT IGNORE INTO guilds (id) VALUES ('" + guild.id + "')";
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Added guild to database.");
+    })
     var channels = guild.channels;
     var botChannelID = checkIfBotChannelExists(channels);
     if (botChannelID) {
