@@ -1,6 +1,8 @@
 # OhDarnBot
 A Discord bot developed specifically for the [Oh Darn Discord](https://discord.gg/vceNhvR).
-Expansion to other servers has been kept in mind for if that ever becomes a point of interest.
+Support for multiple servers/customisation is a work in progress.
+
+Public website is now live [here](https://http://bot.ohdarn.tv/).
 
 This project serves two purposes: 
 - to further my programming skills and knowledge of Node.JS
@@ -71,4 +73,6 @@ For more information on a command.
 - [x] Database to store each guild's config
 - [ ] <s>Setup VPS to run bot as a service</s>
 - [x] Setup bot to use [deploys.io](https://deploys.io/)
+- [ ] Create API
+- [ ] Move commands into their own folder
 
