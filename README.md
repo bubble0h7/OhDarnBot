@@ -69,6 +69,6 @@ For more information on a command.
 - [ ] Break commands up into folders/seperate files
 - [ ] Give the option to configure/customise the bot
 - [x] Database to store each guild's config
-- <s>[ ] Setup VPS to run bot as a service</s>
+- [ ] <s>Setup VPS to run bot as a service</s>
 - [x] Setup bot to use [deploys.io](https://deploys.io/)
 
