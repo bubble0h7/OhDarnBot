@@ -1,7 +1,7 @@
 module.exports = function (args, message) { 
     
     const checkIfBotChannelExists = require('./functions/checkIfBotChannelExists.js');
-    
+
     let arg1 = args[0];
     var guild = message.guild;
     var guildMembers = guild.members;
@@ -9,15 +9,19 @@ module.exports = function (args, message) {
     switch (arg1) {
 
         case "setup":
+            var updatedSomeonesRole = false;
             for (var [id, guildMember] of guildMembers) {
                 if (guildMember.presence.game) {
                     if (guildMember.presence.game.streaming === true) {
                         giveMemberStreamingRole(guildMember, guild);
                         message.channel.send(guildMember + " is streaming. Updated their role.");
+                        updatedSomeonesRole = true;
                     }
                 }
             };
-            //TODO add response for if no one is currently streaming
+            if (updatedSomeonesRole === false) {
+                message.channel.send("No one seems to be streaming right now.");
+            };
         break;
                     
         case "botchannel":
