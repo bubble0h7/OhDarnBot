@@ -1,11 +1,17 @@
 module.exports = function (args, message) { 
     
-    const checkIfBotChannelExists = require('./functions/checkIfBotChannelExists.js');
+    var checkIfBotChannelExists = require('./functions/checkIfBotChannelExists.js');
+    var giveMemberStreamingRole = require('./functions/giveMemberStreamingRole.js');
 
     //require config file
     const configFileName = "./config.json";
     const configFile = require(configFileName);
     
+    //require discord.js commando library 
+    const discord = require("discord.js");
+
+    //commands
+    const help = require('./help.js');
     
     //database 
     const api = require('./database/api.js');
@@ -60,7 +66,7 @@ module.exports = function (args, message) {
             if (arg2.startsWith("#") && arg2.length == 7 && arg2.substr(1).match("^[A-z0-9]+$")){
                 
                 //Attempt to update database
-                api.update(message.guild.id, "embed_colour", arg2, message);
+                api.update(message.guild, "embed_colour", arg2.substr(1), message);
 
             } else {
                 message.channel.send("Please enter a proper hex colour value. For example: #e74999");
@@ -68,7 +74,26 @@ module.exports = function (args, message) {
         break;
 
         default:
-            //TODO call help.config command here
+            var sendEmbed = function (response, embedDetails) {
+                var helpEmbed = new discord.RichEmbed()
+                .setColor('#' + response.embed_colour)
+                .setTitle(embedDetails.title)
+                .setDescription(embedDetails.description)
+                .addField("Try:", embedDetails.try)
+                .addField("Parameters:", embedDetails.parameters)
+                .addField("Example:", embedDetails.example)
+                .setTimestamp()
+                .setFooter('OhDarnBot');
+                message.channel.send(helpEmbed);
+            }
+
+            function getEmbedDetails(response, sendEmbed) {
+                var embedDetails = help(["config", ""]);
+                sendEmbed(response, embedDetails);
+            }
+
+            var response = api.get(message.guild.id, "embed_colour", getEmbedDetails, sendEmbed);
+    
         break;
     }                
 };

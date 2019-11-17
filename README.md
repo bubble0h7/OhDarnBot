@@ -56,6 +56,11 @@ Checks for an 'ohdarn-bot' text channel, and creates the channel if one doesn't 
 
 **Parameters:** none  **|  Example:** `>config botchannel`
 
+#### >config embedcolour OR >config embedcolor
+Sets the embed accent colour for bot responses within your Discord Server.
+
+**Parameters:** hex  **|  Example:** `>config embedcolour #e74999`
+
 ### >help
 For more information on a command.
 
@@ -68,11 +73,11 @@ For more information on a command.
 - [ ] Create embeded introductory message for on guild join
 - [ ] Refactor 'checkIfXExists' functions
 - [ ] Implement lodash to make the 'presenceUpdate' event less gross
-- [ ] Break commands up into folders/seperate files
+- [x] Break commands up into folders/seperate files
 - [ ] Give the option to configure/customise the bot
 - [x] Database to store each guild's config
 - [ ] <s>Setup VPS to run bot as a service</s>
-- [x] Setup bot to use [deploys.io](https://deploys.io/)
-- [ ] Create API
-- [ ] Move commands into their own folder
+- [x] Setup bot to use [dashflo.net](https://dashflo.net/)
+- [x] Create API
+- [x] Move commands into their own folder
 

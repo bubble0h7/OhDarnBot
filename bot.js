@@ -69,7 +69,7 @@ function giveMemberStreamingRole (member, guild) {
 
 bot.on("ready", () => {
     //connect to db
-    api.connect(function(err) {
+    api.testConnection(function(err) {
         if (err) throw err;
         console.log("Connected to database!");
       });
@@ -80,7 +80,7 @@ bot.on("ready", () => {
         }).catch(err => {
             console.log(err.stack);
     });
-    bot.user.setActivity('with v1.1.3 (UNSTABLE)', { type: 'PLAYING' })
+    bot.user.setActivity('with v1.2.0 (STABLE)', { type: 'PLAYING' })
         .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
         .catch(console.error);
 });
@@ -144,9 +144,9 @@ bot.on("message", message => {
             break;
             case "help":
 
-                var embedDetails = help(args);
-                var helpEmbed = new discord.RichEmbed()
-                    .setColor(configFile.embedColor)
+                var sendEmbed = function (response, embedDetails) {
+                    var helpEmbed = new discord.RichEmbed()
+                    .setColor('#' + response.embed_colour)
                     .setTitle(embedDetails.title)
                     .setDescription(embedDetails.description)
                     .addField("Try:", embedDetails.try)
@@ -154,8 +154,16 @@ bot.on("message", message => {
                     .addField("Example:", embedDetails.example)
                     .setTimestamp()
                     .setFooter('OhDarnBot');
-                message.channel.send(helpEmbed);
+                    message.channel.send(helpEmbed);
+                }
 
+                function getEmbedDetails(response, sendEmbed) {
+                    var embedDetails = help(args);
+                    sendEmbed(response, embedDetails);
+                }
+
+                var response = api.get(message.guild.id, "embed_colour", getEmbedDetails, sendEmbed);
+            
             break;
         }
     };
@@ -183,11 +191,7 @@ bot.on('presenceUpdate', (oldMember, newMember) => {
 // Triggers when the bot joins a server
 bot.on("guildCreate", guild => {
     console.log("Joined a new guild: " + guild.name);
-    var sql = "INSERT IGNORE INTO guilds (id) VALUES ('" + guild.id + "')";
-    con.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log("Added guild to database.");
-    });
+    api.insert(guild, "id, embed_colour", guild.id + "', 'e74999");
     var channels = guild.channels;
     var botChannelID = checkIfBotChannelExists(channels);
     if (botChannelID) {

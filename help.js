@@ -43,9 +43,9 @@ module.exports = function (args) {
                     embedDetails = {
                           title: ">config"
                         , description: "These commands are designed to help with the configuration of your Oh Darn Bot." 
-                        , try: [">help config setup", ">help config botchannel"]
+                        , try: [">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour"]
                         , parameters: ["Yes"]
-                        , example: [">config setup",">config botchannel"]
+                        , example: [">config setup",">config botchannel",">config embedcolor #e74999",">config embedcolour #e74999"]
                     };
             }
             break;
