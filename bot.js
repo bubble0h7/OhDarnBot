@@ -14,6 +14,7 @@ const api = require('./database/api.js');
 //commands
 const help = require('./help.js');
 const config = require('./config.js');
+const champ = require('./champ.js');
 
 //functions
 const checkIfBotChannelExists = require('./functions/checkIfBotChannelExists.js');
@@ -80,7 +81,7 @@ bot.on("ready", () => {
         }).catch(err => {
             console.log(err.stack);
     });
-    bot.user.setActivity('with v1.2.0 (STABLE)', { type: 'PLAYING' })
+    bot.user.setActivity('with v1.2.2 (UNSTABLE)', { type: 'PLAYING' })
         .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
         .catch(console.error);
 });
@@ -129,13 +130,10 @@ bot.on("message", message => {
                     message.reply("For help using the roll command, try >help roll");
                     break;
                 }
-            case "random":
-                let thing = args[0];
-                if (thing  == "lolchamp" || thing == "champ") {
-                       getRandomLeagueChamp(message);
-                } else {
-                    console.log("Invalid arg: " + thing);
-                };
+            case "champ":
+
+                champ(args, message);
+
             break;
             case "config":
 
