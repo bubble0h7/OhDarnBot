@@ -36,12 +36,16 @@ Emulates rolling dice.
 **Parameters:** quantity, dice  **|  Example:** `>roll 3 d6`
 
 
-### >random
-Random generators.
-### >random champ OR >random lolchamp
+### >champ
+This can be used to fetch League of Legends champions by name. Alternatively, use the random parameter to get a random champion's details.
+#### >champ 
+Fetchs you a champion from League of Legends by name.
+
+**Parameters:** name  **|  Example:** `>champ soraka`
+#### >champ random OR >champ ran
 Fetchs you a random champion from League of Legends.
 
-**Parameters:** none  **|  Example:** `>random champ`
+**Parameters:** none  **|  Example:** `>champ random`
 
 
 ### >config
