@@ -58,35 +58,35 @@ module.exports = function (args) {
                 , example: [">roll 3 d8"]
             };
             break;
-        case "random":
+        case "champ":
             switch (arg2) {
-                case "lolchamp":
-                case "champ":
+                case "random":
+                case "ran":
                     embedDetails = {
-                          title: ">random champ / >random lolchamp"
+                          title: ">champ random / >champ ran"
                         , description: "This command will fetch you a random champion from League of Legends." 
-                        , try: [">help config setup", ">help config botchannel"]
+                        , try: [">help champ random", ">help champ ran"]
                         , parameters: ["None"]
-                        , example: [">random champ", ">random lolchamp"]
+                        , example: [">champ random", ">champ ran"]
                     };
-                    break;
-                    default:
-                        embedDetails = {
-                              title: ">random"
-                            , description: "These commands are random generators that may come in handy." 
-                            , try: [">help random lolchamp", ">help random champ"]
-                            , parameters: ["Yes"]
-                            , example: [">random champ", ">random lolchamp"]
-                        };
+                break;
+                default:
+                    embedDetails = {
+                            title: ">champ"
+                        , description: "This can be used to fetch League of Legends champions by name. Alternatively, use the random parameter to get a random champion's details." 
+                        , try: [">help champ random", ">help champ ran"]
+                        , parameters: ["Champion name OR random"]
+                        , example: [">champ annie", ">champ random", ">champ ran"]
+                    };
             }
             break;
     default:
         embedDetails = {
               title: ">help"
             , description: "What do you need help with?" 
-            , try: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour",  ">help roll", ">help random lolchamp", ">help random champ"]
+            , try: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour",  ">help roll", ">help champ random", ">help champ ran"]
             , parameters: ["Yes"]
-            , example: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour", ">help roll", ">help random lolchamp", ">help random champ"]
+            , example: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour", ">help roll", ">help champ random", ">help champ ran"]
         };
     }
     

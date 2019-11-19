@@ -119,6 +119,7 @@ module.exports = function (args, message) {
 
                     var response = api.get(message.guild.id, "embed_colour", getEmbedDetails, sendEmbed); */
                 }
+                
             break;
         }
     } else {
