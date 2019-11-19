@@ -42,6 +42,8 @@ This can be used to fetch League of Legends champions by name. Alternatively, us
 Fetchs you a champion from League of Legends by name.
 
 **Parameters:** name  **|  Example:** `>champ soraka`
+![Image of Response to '>champ soraka'](https://cdn.discordapp.com/attachments/613690399717982229/646293952617775124/unknown.png)
+
 #### >champ random OR >champ ran
 Fetchs you a random champion from League of Legends.
 
