@@ -28,17 +28,143 @@ module.exports = function (args, message) {
         switch (arg1) {
                         
             case "top":
-                // Fetch champ with top role
+                
+                if (arg1) {
+                    if (champCount > 0) {
+                        var role = "Top";
+                        var tops = [];
+                        champs.forEach(function(champ) {
+                            if (champ.roles.includes(role)) {
+                                tops.push(champ.key);
+                            }
+                        });
+
+                        if (tops.length > 0) {
+                            var randomNumber = Math.floor((Math.random() * tops.length) + 1) -1;    
+                            
+                            var randomKey = tops[randomNumber];
+
+                            var found = false;
+                            var foundChamp = null;
+                            champs.forEach(function(champ) {
+                                if (champ.key == randomKey) {
+                                    foundChamp = champ;
+                                    found = true;
+                                }
+                            });
+                            if (found && foundChamp != null) {
+                                // TODO: champ should probably just be passed into the embed sender?
+                                var name = foundChamp.name;
+                                var title = foundChamp.title;
+                                var description = foundChamp.blurb.replace('<br><br>','');
+                                var tags = foundChamp.tags;
+                                var roles = foundChamp.roles;
+                                sendLeagueChampionEmbed(message, name, title, description, tags, roles);
+                            } else {
+                                message.channel.send("Failed to find random top champion.");
+                            }
+                        } else {
+                        message.channel.send("Unable to find any top champions.");
+                        }
+                    } else {
+                        message.channel.send("Could not find any League Champions.");
+                    }
+                }
+
             break;
 
             case "jungle":
             case "jun":
             case "jg":
-                // Fetch champ with jungle role
+                
+                if (arg1) {
+                    if (champCount > 0) {
+                        var role = "Jungle";
+                        var junglers = [];
+                        champs.forEach(function(champ) {
+                            if (champ.roles.includes(role)) {
+                                junglers.push(champ.key);
+                            }
+                        });
+
+                        if (junglers.length > 0) {
+                            var randomNumber = Math.floor((Math.random() * junglers.length) + 1) -1;    
+                            
+                            var randomKey = junglers[randomNumber];
+
+                            var found = false;
+                            var foundChamp = null;
+                            champs.forEach(function(champ) {
+                                if (champ.key == randomKey) {
+                                    foundChamp = champ;
+                                    found = true;
+                                }
+                            });
+                            if (found && foundChamp != null) {
+                                // TODO: champ should probably just be passed into the embed sender?
+                                var name = foundChamp.name;
+                                var title = foundChamp.title;
+                                var description = foundChamp.blurb.replace('<br><br>','');
+                                var tags = foundChamp.tags;
+                                var roles = foundChamp.roles;
+                                sendLeagueChampionEmbed(message, name, title, description, tags, roles);
+                            } else {
+                                message.channel.send("Failed to find random jungle champion.");
+                            }
+                        } else {
+                        message.channel.send("Unable to find any jungle champions.");
+                        }
+                    } else {
+                        message.channel.send("Could not find any League Champions.");
+                    }
+                }
+
             break;
 
             case "mid":
-                // Fetch champ with mid role
+                
+                if (arg1) {
+                    if (champCount > 0) {
+                        var role = "Mid";
+                        var mids = [];
+                        champs.forEach(function(champ) {
+                            if (champ.roles.includes(role)) {
+                                mids.push(champ.key);
+                            }
+                        });
+
+                        if (mids.length > 0) {
+                            var randomNumber = Math.floor((Math.random() * mids.length) + 1) -1;    
+                            
+                            var randomKey = mids[randomNumber];
+
+                            var found = false;
+                            var foundChamp = null;
+                            champs.forEach(function(champ) {
+                                if (champ.key == randomKey) {
+                                    foundChamp = champ;
+                                    found = true;
+                                }
+                            });
+                            if (found && foundChamp != null) {
+                                // TODO: champ should probably just be passed into the embed sender?
+                                var name = foundChamp.name;
+                                var title = foundChamp.title;
+                                var description = foundChamp.blurb.replace('<br><br>','');
+                                var tags = foundChamp.tags;
+                                var roles = foundChamp.roles;
+                                sendLeagueChampionEmbed(message, name, title, description, tags, roles);
+                            } else {
+                                message.channel.send("Failed to find random mid champion.");
+                            }
+                        } else {
+                        message.channel.send("Unable to find any mid champions.");
+                        }
+                    } else {
+                        message.channel.send("Could not find any League Champions.");
+                    }
+                }
+
             break;
 
             case "adc":
