@@ -60,6 +60,54 @@ module.exports = function (args) {
             break;
         case "champ":
             switch (arg2) {
+                case "top":
+                    embedDetails = {
+                          title: ">champ top"
+                        , description: "This command will fetch you a random top champion from League of Legends." 
+                        , try: [">help champ top"]
+                        , parameters: ["None"]
+                        , example: [">champ top"]
+                    };
+                break;
+                case "jungle":
+                case "jun":
+                case "jg":
+                    embedDetails = {
+                          title: ">champ jungle / >champ jun / >chammp jg"
+                        , description: "This command will fetch you a random jungle champion from League of Legends." 
+                        , try: [">help champ jungle", ">help champ jun", ">help champ jg"]
+                        , parameters: ["None"]
+                        , example: [">champ jungle", ">champ jun", ">champ jg"]
+                    };
+                break;
+                case "mid":
+                    embedDetails = {
+                          title: ">champ mid"
+                        , description: "This command will fetch you a random mid champion from League of Legends." 
+                        , try: [">help champ mid"]
+                        , parameters: ["None"]
+                        , example: [">champ mid"]
+                    };
+                break;
+                case "adc":
+                    embedDetails = {
+                          title: ">champ adc"
+                        , description: "This command will fetch you a random adc champion from League of Legends." 
+                        , try: [">help champ adc"]
+                        , parameters: ["None"]
+                        , example: [">champ adc"]
+                    };
+                break;
+                case "sup":
+                case "support":
+                    embedDetails = {
+                          title: ">champ sup / >champ support"
+                        , description: "This command will fetch you a support champion from League of Legends." 
+                        , try: [">help champ sup", ">help champ support"]
+                        , parameters: ["None"]
+                        , example: [">champ sup", ">champ support"]
+                    };
+                break;
                 case "random":
                 case "ran":
                     embedDetails = {
@@ -84,9 +132,9 @@ module.exports = function (args) {
         embedDetails = {
               title: ">help"
             , description: "What do you need help with?" 
-            , try: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour",  ">help roll", ">help champ random", ">help champ ran"]
+            , try: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour",  ">help roll", ">help champ random", ">help champ ran", ">help champ top", ">help champ jg", ">help champ jun", ">help champ jungle", ">help champ mid", ">help champ adc", ">help champ sup", ">help champ support"]
             , parameters: ["Yes"]
-            , example: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour", ">help roll", ">help champ random", ">help champ ran"]
+            , example: [">help config", ">help config setup", ">help config botchannel", ">help config embedcolor", ">help config embedcolour", ">help roll", ">help champ random", ">help champ ran", ">help champ top", ">help champ jg", ">help champ jun", ">help champ jungle", ">help champ mid", ">help champ adc", ">help champ sup", ">help champ support"]
         };
     }
     

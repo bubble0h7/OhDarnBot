@@ -52,6 +52,31 @@ Fetchs you a random champion from League of Legends.
 
 ![Image of response to '>champ random'](https://cdn.discordapp.com/attachments/613690399717982229/646294959347073025/unknown.png)
 
+#### >champ top
+Fetchs you a random top champion from League of Legends.
+
+**Parameters:** none  **|  Example:** `>champ top`
+
+#### >champ jg OR >champ jun OR >champ jungle
+Fetchs you a random jungle champion from League of Legends.
+
+**Parameters:** none  **|  Example:** `>champ jungle`
+
+#### >champ mid
+Fetchs you a random mid champion from League of Legends.
+
+**Parameters:** none  **|  Example:** `>champ mid`
+
+#### >champ adc
+Fetchs you a random adc champion from League of Legends.
+
+**Parameters:** none  **|  Example:** `>champ adc`
+
+#### >champ sup OR >champ support
+Fetchs you a random support champion from League of Legends.
+
+**Parameters:** none  **|  Example:** `>champ support`
+
 
 ### >config
 To help with the configuration of your Oh Darn Bot.
