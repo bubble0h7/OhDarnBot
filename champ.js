@@ -42,7 +42,49 @@ module.exports = function (args, message) {
             break;
 
             case "adc":
-                // Fetch champ with adc role
+                
+                if (arg1) {
+                    if (champCount > 0) {
+                        var role = "ADC";
+                        var adcs = [];
+                        champs.forEach(function(champ) {
+                            if (champ.roles.includes(role)) {
+                                adcs.push(champ.key);
+                            }
+                        });
+
+                        if (adcs.length > 0) {
+                            var randomNumber = Math.floor((Math.random() * adcs.length) + 1) -1;    
+                            
+                            var randomKey = adcs[randomNumber];
+
+                            var found = false;
+                            var foundChamp = null;
+                            champs.forEach(function(champ) {
+                                if (champ.key == randomKey) {
+                                    foundChamp = champ;
+                                    found = true;
+                                }
+                            });
+                            if (found && foundChamp != null) {
+                                // TODO: champ should probably just be passed into the embed sender?
+                                var name = foundChamp.name;
+                                var title = foundChamp.title;
+                                var description = foundChamp.blurb.replace('<br><br>','');
+                                var tags = foundChamp.tags;
+                                var roles = foundChamp.roles;
+                                sendLeagueChampionEmbed(message, name, title, description, tags, roles);
+                            } else {
+                                message.channel.send("Failed to find random ADC champion.");
+                            }
+                        } else {
+                        message.channel.send("Unable to find any ADC champions.");
+                        }
+                    } else {
+                        message.channel.send("Could not find any League Champions.");
+                    }
+                }
+
             break;
 
             case "sup":
